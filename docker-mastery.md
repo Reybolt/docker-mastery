@@ -132,10 +132,10 @@ docker container ls: Prints list of running containers
  docker container stop: Stops the container process but doesn't remove it.
 ```
 Run vs. Start
-
+```bash
 *docker container run* always starts a new container
 use *docker container start* to start an existing stopped one
-
+```
 ```bash
 *docker container logs container_name*: Prints all logs for this container.
 ```
