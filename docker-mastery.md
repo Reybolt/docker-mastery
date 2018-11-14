@@ -94,12 +94,16 @@ Docker for Mac Tips
     - https://www.bretfisher.com/shell
 
 ### Section 3, Lecture 18:
-> docker version: Returns the version of your client and server.
+```bash
+docker version: Returns the version of your client and server.
+```
 
-> docker info: Shows most configuration values for the engine.
-
-> docker: Returns list of commands you can use with docker.
-
+```bash
+docker info: Shows most configuration values for the engine.
+```
+```bash
+docker: Returns list of commands you can use with docker.
+```
 > docker command line structure:
     - old (still works): docker <command> (options)
     - new: docker <command> <sub-command> (options)
@@ -121,15 +125,54 @@ docker container run --publish 80:80 nginx
 3. Opened port 80 on the host IP
 4. Routes the traffic to the container IP, port 80
 
-> docker container ls: Prints list of running containers
-
-> docker container stop: Stops the container process but doesn't remove it.
-
+```bash
+docker container ls: Prints list of running containers
+```
+```bash
+ docker container stop: Stops the container process but doesn't remove it.
+```
 Run vs. Start
 
 *docker container run* always starts a new container
 use *docker container start* to start an existing stopped one
 
-> *docker container logs container_name*: Prints all logs for this container.
+```bash
+*docker container logs container_name*: Prints all logs for this container.
+```
+```bash
+docker container rm: Remove (delete) one or more containers
+```
+What happens in 'docker container run'
+1. Looks for that image locally in image cache, doesn't find anything
+2. Then looks in remote image repository (defaults to Docker Hub)
+3. Downloads the latest version (nginx:latest by default)
+4. Creates new container based on that image and prepares to start
+5. Gives it a virtual IP on a private network inside docker engine
+6. Opens up port 80 on host and forwards to port 80 in container (if not supplied it doesn't open the ports)
+7. Starts container by using the CMD in the image Dockerfile
 
-> docker container rm: Remove (delete) one or more containers
+![docker_command](docker_command.png "Docker command")
+
+Containers aren't Mini-VM's
+- They are just processes
+- Limited to what resources they can access
+- Exit when process stops
+
+```bash
+docker top: List running processes within specific container
+```
+
+```bash
+ps aux: show me all running processes
+```
+
+Assignment: Manage Multiple Containers
+
+- docs.docker.com and --help are your friend
+- Run a nginx, a mysql, and a httpd (apache) server
+- Run all of them --detach (or -d), name them with --name
+- nginx should listen on 80:80, httpd o 8080:80, mysql on 3306:3306
+- When running mysql, use the --env option (oe -e) to pass in MYSQL_RANDOM_ROOT_PASSWORD=yes
+- Use docker container logs on mysql to find the random password it created on startup
+- Clean it all up with docker container stop and docker container rm (both can accept multiple names or IDs)
+- Use docker container ls to ensure everything is correct before and after cleanup
